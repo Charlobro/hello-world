@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques Remorqueur - Dashboard</title>
+    
+    <!-- Custom CSS (self-contained) -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <span class="fas fa-ship"></span>
+                StatRemorqueur
+            </a>
+            <div class="navbar-nav">
+                <div class="nav-item">
+                    <a class="nav-link active" href="#dashboard">Dashboard</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#statistiques">Statistiques</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#graphiques">Graphiques</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="#donnees">Données</a>
+                </div>
+            </div>
+            <span class="navbar-text">
+                <span class="fas fa-calendar-alt"></span>
+                <span id="current-date"></span>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+        <!-- Dashboard Section -->
+        <section id="dashboard">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="h2 mb-0">Dashboard des Performances</h1>
+                    <p class="text-muted">Vue d'ensemble des statistiques de remorquage</p>
+                </div>
+            </div>
+
+            <!-- Key Metrics Cards -->
+            <div class="row mb-5">
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                    <div class="card metric-card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title">Total Remorquages</h6>
+                                    <h3 class="mb-0" id="total-tows">-</h3>
+                                </div>
+                                <span class="fas fa-anchor fa-2x opacity-75"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                    <div class="card metric-card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title">Temps Moyen</h6>
+                                    <h3 class="mb-0" id="avg-time">-</h3>
+                                    <small>minutes</small>
+                                </div>
+                                <span class="fas fa-clock fa-2x opacity-75"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                    <div class="card metric-card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title">Distance Totale</h6>
+                                    <h3 class="mb-0" id="total-distance">-</h3>
+                                    <small>km</small>
+                                </div>
+                                <span class="fas fa-route fa-2x opacity-75"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                    <div class="card metric-card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title">Efficacité</h6>
+                                    <h3 class="mb-0" id="efficiency">-</h3>
+                                    <small>%</small>
+                                </div>
+                                <span class="fas fa-chart-line fa-2x opacity-75"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                    <div class="card metric-card bg-secondary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title">Temps d'Activité</h6>
+                                    <h3 class="mb-0" id="uptime">-</h3>
+                                    <small>%</small>
+                                </div>
+                                <span class="fas fa-power-off fa-2x opacity-75"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                    <div class="card metric-card bg-danger text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title">Temps d'Arrêt</h6>
+                                    <h3 class="mb-0" id="downtime">-</h3>
+                                    <small>%</small>
+                                </div>
+                                <span class="fas fa-pause fa-2x opacity-75"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section id="graphiques">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="h3">Visualisations Graphiques</h2>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <!-- Monthly Tows Chart -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Remorquages par Mois</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="monthlyTowsChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tow Types Chart -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Répartition par Type</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="towTypesChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <!-- Weekly Trends Chart -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Tendances Hebdomadaires</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="weeklyTrendsChart" width="600" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Métriques de Performance</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="performanceChart" width="300" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Table Section -->
+        <section id="donnees">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <h2 class="h3">Remorquages Récents</h2>
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-sm" id="filterBtn">
+                            <span class="fas fa-filter me-1"></span>Filtres
+                        </button>
+                        <button class="btn btn-success btn-sm" id="exportBtn">
+                            <span class="fas fa-download me-1"></span>Exporter
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Panel -->
+            <div class="row mb-3" id="filtersPanel" style="display: none;">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="dateFilter" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="dateFilter">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="typeFilter" class="form-label">Type</label>
+                                    <select class="form-select" id="typeFilter">
+                                        <option value="">Tous types</option>
+                                        <option value="Assistance maritime">Assistance maritime</option>
+                                        <option value="Remorquage portuaire">Remorquage portuaire</option>
+                                        <option value="Sauvetage">Sauvetage</option>
+                                        <option value="Transport">Transport</option>
+                                        <option value="Autres">Autres</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="locationFilter" class="form-label">Localisation</label>
+                                    <select class="form-select" id="locationFilter">
+                                        <option value="">Toutes localisations</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">&nbsp;</label>
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary" id="applyFilters">Appliquer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover" id="towsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Navire</th>
+                                            <th>Localisation</th>
+                                            <th>Durée (min)</th>
+                                            <th>Distance (km)</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light mt-5 py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 StatRemorqueur. Système de statistiques pour remorqueurs.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small class="text-muted">Dernière mise à jour: <span id="last-update"></span></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts (self-contained) -->
+    <script src="js/main.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>

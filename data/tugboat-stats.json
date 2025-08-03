@@ -1,0 +1,100 @@
+{
+  "overview": {
+    "totalTows": 1247,
+    "averageTowTime": 45,
+    "totalDistance": 8350,
+    "energyEfficiency": 87.3,
+    "uptime": 92.1,
+    "downtime": 7.9
+  },
+  "monthlyTows": [
+    {"month": "Jan", "tows": 98, "year": 2024},
+    {"month": "Fév", "tows": 112, "year": 2024},
+    {"month": "Mar", "tows": 127, "year": 2024},
+    {"month": "Avr", "tows": 103, "year": 2024},
+    {"month": "Mai", "tows": 118, "year": 2024},
+    {"month": "Jun", "tows": 134, "year": 2024},
+    {"month": "Jul", "tows": 142, "year": 2024},
+    {"month": "Aoû", "tows": 156, "year": 2024},
+    {"month": "Sep", "tows": 139, "year": 2024},
+    {"month": "Oct", "tows": 108, "year": 2024},
+    {"month": "Nov", "tows": 95, "year": 2024},
+    {"month": "Déc", "tows": 115, "year": 2024}
+  ],
+  "towTypes": [
+    {"type": "Assistance maritime", "count": 387, "percentage": 31.1},
+    {"type": "Remorquage portuaire", "count": 324, "percentage": 26.0},
+    {"type": "Sauvetage", "count": 298, "percentage": 23.9},
+    {"type": "Transport", "count": 187, "percentage": 15.0},
+    {"type": "Autres", "count": 51, "percentage": 4.1}
+  ],
+  "weeklyTrends": [
+    {"week": "Sem 1", "distance": 145, "tows": 23, "efficiency": 89.2},
+    {"week": "Sem 2", "distance": 167, "tows": 28, "efficiency": 91.1},
+    {"week": "Sem 3", "distance": 134, "tows": 19, "efficiency": 85.7},
+    {"week": "Sem 4", "distance": 198, "tows": 32, "efficiency": 93.4},
+    {"week": "Sem 5", "distance": 156, "tows": 25, "efficiency": 88.9},
+    {"week": "Sem 6", "distance": 189, "tows": 29, "efficiency": 90.6},
+    {"week": "Sem 7", "distance": 172, "tows": 26, "efficiency": 87.8},
+    {"week": "Sem 8", "distance": 211, "tows": 34, "efficiency": 94.2}
+  ],
+  "recentTows": [
+    {
+      "id": "T2024-001247",
+      "date": "2024-12-15T14:30:00",
+      "type": "Assistance maritime",
+      "vessel": "Cargo MV Neptune",
+      "location": "Port de Marseille",
+      "duration": 52,
+      "distance": 8.7,
+      "status": "Terminé"
+    },
+    {
+      "id": "T2024-001246",
+      "date": "2024-12-15T09:15:00",
+      "type": "Remorquage portuaire",
+      "vessel": "Pétrolier SS Atlantis",
+      "location": "Port du Havre",
+      "duration": 38,
+      "distance": 5.2,
+      "status": "Terminé"
+    },
+    {
+      "id": "T2024-001245",
+      "date": "2024-12-14T16:45:00",
+      "type": "Sauvetage",
+      "vessel": "Voilier Blue Wind",
+      "location": "Au large de Nice",
+      "duration": 127,
+      "distance": 23.4,
+      "status": "Terminé"
+    },
+    {
+      "id": "T2024-001244",
+      "date": "2024-12-14T11:20:00",
+      "type": "Transport",
+      "vessel": "Barge Méditerranée",
+      "location": "Port de Toulon",
+      "duration": 41,
+      "distance": 6.8,
+      "status": "Terminé"
+    },
+    {
+      "id": "T2024-001243",
+      "date": "2024-12-13T19:30:00",
+      "type": "Assistance maritime",
+      "vessel": "Ferry Corsica Express",
+      "location": "Port de Bastia",
+      "duration": 65,
+      "distance": 12.1,
+      "status": "Terminé"
+    }
+  ],
+  "locations": [
+    {"name": "Port de Marseille", "tows": 342, "coords": [43.2965, 5.3698]},
+    {"name": "Port du Havre", "tows": 287, "coords": [49.4944, 0.1079]},
+    {"name": "Port de Nice", "tows": 198, "coords": [43.7102, 7.2620]},
+    {"name": "Port de Toulon", "tows": 234, "coords": [43.1242, 5.9280]},
+    {"name": "Port de Bastia", "tows": 186, "coords": [42.7027, 9.4531]}
+  ]
+}
