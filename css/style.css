@@ -37,6 +37,33 @@
     --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
+/* Font Awesome Fallbacks */
+.fas::before, .fa::before {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+.fa-ship::before { content: '🚢'; }
+.fa-moon::before { content: '🌙'; }
+.fa-sun::before { content: '☀️'; }
+.fa-download::before { content: '⬇️'; }
+.fa-tasks::before { content: '📋'; }
+.fa-clock::before { content: '⏰'; }
+.fa-chart-line::before { content: '📈'; }
+.fa-search::before { content: '🔍'; }
+.fa-sync-alt::before { content: '🔄'; }
+.fa-th::before { content: '⊞'; }
+.fa-list::before { content: '☰'; }
+.fa-sort::before { content: '⇅'; }
+.fa-sort-up::before { content: '⇧'; }
+.fa-sort-down::before { content: '⇩'; }
+.fa-eye::before { content: '👁️'; }
+.fa-arrow-up::before { content: '↑'; }
+.fa-check-circle::before { content: '✓'; }
+.fa-exclamation-circle::before { content: '⚠️'; }
+.fa-info-circle::before { content: 'ℹ️'; }
+.fa-exclamation-triangle::before { content: '⚠️'; }
+
 /* Reset and Base Styles */
 * {
     margin: 0;

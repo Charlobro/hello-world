@@ -7,6 +7,139 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Fallback for blocked CDN resources -->
+    <script>
+        // Simple Chart.js fallback if CDN is blocked
+        if (typeof Chart === 'undefined') {
+            window.Chart = class {
+                constructor(ctx, config) {
+                    this.ctx = ctx;
+                    this.config = config;
+                    this.canvas = ctx.canvas || ctx;
+                    this.options = config.options || {};
+                    this.data = config.data || {};
+                    this.createFallbackChart();
+                }
+                
+                createFallbackChart() {
+                    const canvas = this.canvas;
+                    const ctx = canvas.getContext('2d');
+                    const width = canvas.width = canvas.offsetWidth || 400;
+                    const height = canvas.height = canvas.offsetHeight || 200;
+                    
+                    // Clear canvas
+                    ctx.clearRect(0, 0, width, height);
+                    
+                    // Simple bar chart fallback
+                    if (this.config.type === 'bar') {
+                        this.drawBarChart(ctx, width, height);
+                    } else if (this.config.type === 'line') {
+                        this.drawLineChart(ctx, width, height);
+                    } else {
+                        this.drawPlaceholder(ctx, width, height);
+                    }
+                }
+                
+                drawBarChart(ctx, width, height) {
+                    const data = this.data.datasets[0]?.data || [];
+                    const labels = this.data.labels || [];
+                    const margin = 50;
+                    const chartWidth = width - margin * 2;
+                    const chartHeight = height - margin * 2;
+                    
+                    if (data.length === 0) return this.drawPlaceholder(ctx, width, height);
+                    
+                    const max = Math.max(...data);
+                    const barWidth = chartWidth / data.length * 0.8;
+                    const barSpacing = chartWidth / data.length * 0.2;
+                    
+                    // Draw bars
+                    ctx.fillStyle = '#3b82f6';
+                    data.forEach((value, index) => {
+                        const barHeight = (value / max) * chartHeight;
+                        const x = margin + index * (barWidth + barSpacing);
+                        const y = height - margin - barHeight;
+                        
+                        ctx.fillRect(x, y, barWidth, barHeight);
+                        
+                        // Draw labels
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = '12px sans-serif';
+                        ctx.textAlign = 'center';
+                        if (labels[index]) {
+                            ctx.fillText(labels[index].substring(0, 8), x + barWidth/2, height - 10);
+                        }
+                        ctx.fillText(value, x + barWidth/2, y - 5);
+                        ctx.fillStyle = '#3b82f6';
+                    });
+                }
+                
+                drawLineChart(ctx, width, height) {
+                    const datasets = this.data.datasets || [];
+                    const labels = this.data.labels || [];
+                    const margin = 50;
+                    const chartWidth = width - margin * 2;
+                    const chartHeight = height - margin * 2;
+                    
+                    if (datasets.length === 0) return this.drawPlaceholder(ctx, width, height);
+                    
+                    const allData = datasets.flatMap(d => d.data || []);
+                    const max = Math.max(...allData);
+                    const stepX = chartWidth / (labels.length - 1);
+                    
+                    datasets.forEach((dataset, dsIndex) => {
+                        const data = dataset.data || [];
+                        const color = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'][dsIndex % 4];
+                        
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        
+                        data.forEach((value, index) => {
+                            const x = margin + index * stepX;
+                            const y = height - margin - (value / max) * chartHeight;
+                            
+                            if (index === 0) {
+                                ctx.moveTo(x, y);
+                            } else {
+                                ctx.lineTo(x, y);
+                            }
+                        });
+                        
+                        ctx.stroke();
+                    });
+                    
+                    // Draw labels
+                    ctx.fillStyle = '#64748b';
+                    ctx.font = '12px sans-serif';
+                    ctx.textAlign = 'center';
+                    labels.forEach((label, index) => {
+                        const x = margin + index * stepX;
+                        ctx.fillText(label, x, height - 10);
+                    });
+                }
+                
+                drawPlaceholder(ctx, width, height) {
+                    ctx.fillStyle = '#f1f5f9';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#64748b';
+                    ctx.font = '16px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Graphique - Données chargées', width/2, height/2);
+                }
+                
+                update() {
+                    this.createFallbackChart();
+                }
+                
+                toBase64Image() {
+                    return this.canvas.toDataURL();
+                }
+            };
+            
+            Chart.instances = [];
+        }
+    </script>
 </head>
 <body>
     <div class="app-container">
