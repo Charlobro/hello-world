@@ -1,0 +1,112 @@
+{
+  "tugboats": [
+    {
+      "id": 1,
+      "name": "Neptune Force",
+      "power_hp": 4500,
+      "operation_hours": 2840,
+      "missions_completed": 156,
+      "fuel_consumption": 45.2,
+      "efficiency": 92.5,
+      "status": "operational",
+      "last_maintenance": "2024-07-15",
+      "crew_size": 6,
+      "max_bollard_pull": 65,
+      "year_built": 2019,
+      "monthly_hours": [220, 235, 245, 268, 252, 240, 255, 230, 248, 265, 242, 238]
+    },
+    {
+      "id": 2,
+      "name": "Ocean Guardian",
+      "power_hp": 3800,
+      "operation_hours": 3120,
+      "missions_completed": 189,
+      "fuel_consumption": 38.7,
+      "efficiency": 89.2,
+      "status": "operational",
+      "last_maintenance": "2024-06-28",
+      "crew_size": 5,
+      "max_bollard_pull": 58,
+      "year_built": 2020,
+      "monthly_hours": [265, 280, 295, 310, 285, 275, 290, 268, 285, 298, 275, 270]
+    },
+    {
+      "id": 3,
+      "name": "Harbor Master",
+      "power_hp": 5200,
+      "operation_hours": 2650,
+      "missions_completed": 142,
+      "fuel_consumption": 52.8,
+      "efficiency": 94.1,
+      "status": "operational",
+      "last_maintenance": "2024-07-22",
+      "crew_size": 7,
+      "max_bollard_pull": 72,
+      "year_built": 2018,
+      "monthly_hours": [195, 210, 225, 245, 232, 220, 235, 215, 228, 242, 225, 218]
+    },
+    {
+      "id": 4,
+      "name": "Sea Titan",
+      "power_hp": 4200,
+      "operation_hours": 1985,
+      "missions_completed": 98,
+      "fuel_consumption": 42.1,
+      "efficiency": 87.8,
+      "status": "maintenance",
+      "last_maintenance": "2024-07-30",
+      "crew_size": 6,
+      "max_bollard_pull": 62,
+      "year_built": 2021,
+      "monthly_hours": [145, 160, 175, 185, 172, 165, 180, 158, 168, 182, 165, 160]
+    },
+    {
+      "id": 5,
+      "name": "Port Striker",
+      "power_hp": 3600,
+      "operation_hours": 3450,
+      "missions_completed": 201,
+      "fuel_consumption": 35.9,
+      "efficiency": 91.3,
+      "status": "operational",
+      "last_maintenance": "2024-07-10",
+      "crew_size": 5,
+      "max_bollard_pull": 55,
+      "year_built": 2017,
+      "monthly_hours": [285, 295, 310, 325, 302, 290, 305, 278, 295, 315, 288, 285]
+    },
+    {
+      "id": 6,
+      "name": "Wave Crusher",
+      "power_hp": 4800,
+      "operation_hours": 2340,
+      "missions_completed": 128,
+      "fuel_consumption": 48.5,
+      "efficiency": 88.9,
+      "status": "operational",
+      "last_maintenance": "2024-06-15",
+      "crew_size": 6,
+      "max_bollard_pull": 68,
+      "year_built": 2022,
+      "monthly_hours": [175, 190, 205, 220, 208, 195, 210, 185, 198, 215, 192, 188]
+    }
+  ],
+  "fleet_summary": {
+    "total_tugboats": 6,
+    "operational": 5,
+    "in_maintenance": 1,
+    "total_power_hp": 26100,
+    "total_missions": 914,
+    "average_efficiency": 90.6,
+    "total_operation_hours": 16385,
+    "last_updated": "2024-08-04T00:00:00Z"
+  },
+  "performance_metrics": {
+    "daily_avg_missions": 12.5,
+    "monthly_fuel_cost": 85420,
+    "utilization_rate": 78.5,
+    "maintenance_schedule_adherence": 95.2,
+    "safety_incidents": 0,
+    "customer_satisfaction": 97.8
+  }
+}

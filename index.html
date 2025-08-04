@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques Remorqueurs - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Fallback for blocked CDN resources -->
+    <script>
+        // Simple Chart.js fallback if CDN is blocked
+        if (typeof Chart === 'undefined') {
+            window.Chart = class {
+                constructor(ctx, config) {
+                    this.ctx = ctx;
+                    this.config = config;
+                    this.canvas = ctx.canvas || ctx;
+                    this.options = config.options || {};
+                    this.data = config.data || {};
+                    this.createFallbackChart();
+                }
+                
+                createFallbackChart() {
+                    const canvas = this.canvas;
+                    const ctx = canvas.getContext('2d');
+                    const width = canvas.width = canvas.offsetWidth || 400;
+                    const height = canvas.height = canvas.offsetHeight || 200;
+                    
+                    // Clear canvas
+                    ctx.clearRect(0, 0, width, height);
+                    
+                    // Simple bar chart fallback
+                    if (this.config.type === 'bar') {
+                        this.drawBarChart(ctx, width, height);
+                    } else if (this.config.type === 'line') {
+                        this.drawLineChart(ctx, width, height);
+                    } else {
+                        this.drawPlaceholder(ctx, width, height);
+                    }
+                }
+                
+                drawBarChart(ctx, width, height) {
+                    const data = this.data.datasets[0]?.data || [];
+                    const labels = this.data.labels || [];
+                    const margin = 50;
+                    const chartWidth = width - margin * 2;
+                    const chartHeight = height - margin * 2;
+                    
+                    if (data.length === 0) return this.drawPlaceholder(ctx, width, height);
+                    
+                    const max = Math.max(...data);
+                    const barWidth = chartWidth / data.length * 0.8;
+                    const barSpacing = chartWidth / data.length * 0.2;
+                    
+                    // Draw bars
+                    ctx.fillStyle = '#3b82f6';
+                    data.forEach((value, index) => {
+                        const barHeight = (value / max) * chartHeight;
+                        const x = margin + index * (barWidth + barSpacing);
+                        const y = height - margin - barHeight;
+                        
+                        ctx.fillRect(x, y, barWidth, barHeight);
+                        
+                        // Draw labels
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = '12px sans-serif';
+                        ctx.textAlign = 'center';
+                        if (labels[index]) {
+                            ctx.fillText(labels[index].substring(0, 8), x + barWidth/2, height - 10);
+                        }
+                        ctx.fillText(value, x + barWidth/2, y - 5);
+                        ctx.fillStyle = '#3b82f6';
+                    });
+                }
+                
+                drawLineChart(ctx, width, height) {
+                    const datasets = this.data.datasets || [];
+                    const labels = this.data.labels || [];
+                    const margin = 50;
+                    const chartWidth = width - margin * 2;
+                    const chartHeight = height - margin * 2;
+                    
+                    if (datasets.length === 0) return this.drawPlaceholder(ctx, width, height);
+                    
+                    const allData = datasets.flatMap(d => d.data || []);
+                    const max = Math.max(...allData);
+                    const stepX = chartWidth / (labels.length - 1);
+                    
+                    datasets.forEach((dataset, dsIndex) => {
+                        const data = dataset.data || [];
+                        const color = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'][dsIndex % 4];
+                        
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        
+                        data.forEach((value, index) => {
+                            const x = margin + index * stepX;
+                            const y = height - margin - (value / max) * chartHeight;
+                            
+                            if (index === 0) {
+                                ctx.moveTo(x, y);
+                            } else {
+                                ctx.lineTo(x, y);
+                            }
+                        });
+                        
+                        ctx.stroke();
+                    });
+                    
+                    // Draw labels
+                    ctx.fillStyle = '#64748b';
+                    ctx.font = '12px sans-serif';
+                    ctx.textAlign = 'center';
+                    labels.forEach((label, index) => {
+                        const x = margin + index * stepX;
+                        ctx.fillText(label, x, height - 10);
+                    });
+                }
+                
+                drawPlaceholder(ctx, width, height) {
+                    ctx.fillStyle = '#f1f5f9';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.fillStyle = '#64748b';
+                    ctx.font = '16px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Graphique - Données chargées', width/2, height/2);
+                }
+                
+                update() {
+                    this.createFallbackChart();
+                }
+                
+                toBase64Image() {
+                    return this.canvas.toDataURL();
+                }
+            };
+            
+            Chart.instances = [];
+        }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-ship"></i>
+                    <h1>Statistiques Remorqueurs</h1>
+                </div>
+                <div class="header-controls">
+                    <button id="theme-toggle" class="btn btn-icon" title="Basculer le thème">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="export-btn" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        Exporter
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Summary Cards -->
+            <section class="dashboard-summary">
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-ship"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Remorqueurs Total</h3>
+                        <p class="card-value" id="total-tugboats">-</p>
+                        <span class="card-status operational">
+                            <span id="operational-count">-</span> Opérationnels
+                        </span>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Missions Total</h3>
+                        <p class="card-value" id="total-missions">-</p>
+                        <span class="card-status">
+                            <span id="daily-avg">-</span> missions/jour en moyenne
+                        </span>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Heures d'Opération</h3>
+                        <p class="card-value" id="total-hours">-</p>
+                        <span class="card-status">
+                            Taux d'utilisation: <span id="utilization-rate">-</span>%
+                        </span>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Efficacité Moyenne</h3>
+                        <p class="card-value" id="avg-efficiency">-</p>
+                        <span class="card-status success">
+                            <i class="fas fa-arrow-up"></i> Performance excellente
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filters and Search -->
+            <section class="controls-section">
+                <div class="search-filter">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Rechercher un remorqueur...">
+                    </div>
+                    <select id="status-filter" class="filter-select">
+                        <option value="all">Tous les statuts</option>
+                        <option value="operational">Opérationnel</option>
+                        <option value="maintenance">En maintenance</option>
+                    </select>
+                    <button id="refresh-btn" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                        Actualiser
+                    </button>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Performance par Remorqueur</h3>
+                        <div class="chart-controls">
+                            <select id="performance-metric">
+                                <option value="efficiency">Efficacité</option>
+                                <option value="missions">Missions</option>
+                                <option value="hours">Heures d'opération</option>
+                            </select>
+                        </div>
+                    </div>
+                    <canvas id="performance-chart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Évolution Mensuelle des Heures</h3>
+                    </div>
+                    <canvas id="monthly-hours-chart"></canvas>
+                </div>
+            </section>
+
+            <!-- Tugboat Details Table -->
+            <section class="tugboat-table-section">
+                <div class="table-header">
+                    <h3>Détails des Remorqueurs</h3>
+                    <div class="table-controls">
+                        <button class="btn btn-icon" id="table-view-toggle" title="Basculer la vue">
+                            <i class="fas fa-th"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="tugboat-table" class="tugboat-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="name">Nom <i class="fas fa-sort"></i></th>
+                                <th data-sort="power_hp">Puissance (HP) <i class="fas fa-sort"></i></th>
+                                <th data-sort="missions_completed">Missions <i class="fas fa-sort"></i></th>
+                                <th data-sort="operation_hours">Heures Op. <i class="fas fa-sort"></i></th>
+                                <th data-sort="efficiency">Efficacité <i class="fas fa-sort"></i></th>
+                                <th data-sort="fuel_consumption">Carburant <i class="fas fa-sort"></i></th>
+                                <th data-sort="status">Statut <i class="fas fa-sort"></i></th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tugboat-table-body">
+                            <!-- Table rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Additional Metrics Section -->
+            <section class="additional-metrics">
+                <div class="metric-card">
+                    <h4>Coût Carburant Mensuel</h4>
+                    <p class="metric-value" id="fuel-cost">-</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Satisfaction Client</h4>
+                    <p class="metric-value" id="customer-satisfaction">-</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Incidents Sécurité</h4>
+                    <p class="metric-value safety" id="safety-incidents">-</p>
+                </div>
+                <div class="metric-card">
+                    <h4>Conformité Maintenance</h4>
+                    <p class="metric-value" id="maintenance-adherence">-</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Système de Gestion des Remorqueurs. Dernière mise à jour: <span id="last-updated">-</span></p>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-ship"></i>
+            <p>Chargement des données...</p>
+        </div>
+    </div>
+
+    <!-- Modal for Tugboat Details -->
+    <div id="tugboat-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-tugboat-name">Détails du Remorqueur</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+</html>
